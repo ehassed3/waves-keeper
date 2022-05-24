@@ -674,10 +674,11 @@ export enum WalletTypes {
   Debug = 'debug',
 }
 
-export interface AssetDetail extends IAssetInfo {
-  displayName: string;
+export interface AssetDetail extends Omit<IAssetInfo, 'timestamp'> {
+  timestamp: string;
   originTransactionId: string;
   issuer?: string;
+  displayName: string;
   isFavorite?: boolean;
   isSuspicious?: boolean;
 }
