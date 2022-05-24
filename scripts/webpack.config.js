@@ -211,12 +211,12 @@ module.exports = ({
         {
           test: /\.tsx?$/,
           loader: 'babel-loader!awesome-typescript-loader?transpileOnly',
-          exclude: /node_modules/,
+          include: SOURCE_FOLDER,
         },
         {
-          test: /\.(jsx?)$/,
-          exclude: /node_modules/,
+          test: /\.js$/,
           loader: 'babel-loader',
+          include: SOURCE_FOLDER,
         },
         {
           test: /obs-store/,
@@ -224,7 +224,6 @@ module.exports = ({
         },
         {
           test: /\.styl/,
-          exclude: /node_modules/,
           loader: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: [
