@@ -3,6 +3,8 @@ import { ACTION } from '../actions';
 import { AssetDetail } from '../services/Background';
 import { WithId } from '@waves/waves-transactions/dist/transactions';
 import { Transaction } from '@waves/ts-types';
+import { DuckInfo } from 'nfts/ducks/utils';
+import { SignArtInfo } from 'nfts/signArt/utils';
 
 export * from './localState';
 export * from './remoteConfig';
@@ -144,6 +146,11 @@ export const assets = createSimpleReducer<Record<string, AssetDetail>>(
 export const usdPrices = createSimpleReducer<Record<string, string>>(
   {},
   ACTION.SET_USD_PRICES
+);
+
+export const nfts = createSimpleReducer<Record<string, DuckInfo | SignArtInfo>>(
+  {},
+  ACTION.UPDATE_NFTS
 );
 
 export const backTabs = (
