@@ -6,6 +6,7 @@ import { Transaction } from '@waves/ts-types';
 import { DuckInfo } from 'nfts/ducks/utils';
 import { SignArtInfo } from 'nfts/signArt/utils';
 import { BabyDuckInfo } from 'nfts/babyDucks/utils';
+import { DucksArtefactInfo } from 'nfts/duckArtifacts/utils';
 
 export * from './localState';
 export * from './remoteConfig';
@@ -150,7 +151,7 @@ export const usdPrices = createSimpleReducer<Record<string, string>>(
 );
 
 export const nfts = createSimpleReducer<
-  Record<string, DuckInfo | BabyDuckInfo | SignArtInfo>
+  Record<string, DuckInfo | BabyDuckInfo | DucksArtefactInfo | SignArtInfo>
 >({}, ACTION.UPDATE_NFTS);
 
 export const backTabs = (
