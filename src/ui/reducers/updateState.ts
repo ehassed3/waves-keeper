@@ -5,7 +5,7 @@ import { WithId } from '@waves/waves-transactions/dist/transactions';
 import { Transaction } from '@waves/ts-types';
 import { DuckInfo } from 'nfts/ducks/utils';
 import { SignArtInfo } from 'nfts/signArt/utils';
-import { BabyDuckInfo } from 'nfts/babyDucks/utils';
+import { DucklingInfo } from 'nfts/ducklings/utils';
 import { DucksArtefactInfo } from 'nfts/duckArtifacts/utils';
 
 export * from './localState';
@@ -151,7 +151,7 @@ export const usdPrices = createSimpleReducer<Record<string, string>>(
 );
 
 export const nfts = createSimpleReducer<
-  Record<string, DuckInfo | BabyDuckInfo | DucksArtefactInfo | SignArtInfo>
+  Record<string, DuckInfo | DucklingInfo | DucksArtefactInfo | SignArtInfo>
 >({}, ACTION.UPDATE_NFTS);
 
 export const backTabs = (
