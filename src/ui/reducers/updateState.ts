@@ -3,7 +3,7 @@ import { ACTION } from '../actions';
 import { AssetDetail } from '../services/Background';
 import { WithId } from '@waves/waves-transactions/dist/transactions';
 import { Transaction } from '@waves/ts-types';
-import { NftInfo } from 'nfts/utils';
+import { NftInfo } from 'nfts';
 
 export * from './localState';
 export * from './remoteConfig';
