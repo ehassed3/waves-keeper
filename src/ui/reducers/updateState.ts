@@ -4,6 +4,7 @@ import { AssetDetail } from '../services/Background';
 import { WithId } from '@waves/waves-transactions/dist/transactions';
 import { Transaction } from '@waves/ts-types';
 import { NftInfo } from 'nfts';
+import { Nft } from 'nfts/utils';
 
 export * from './localState';
 export * from './remoteConfig';
@@ -30,6 +31,7 @@ export type AssetFilters = {
 };
 export type NftFilters = {
   term?: string;
+  creator?: string;
 };
 export type TxHistoryFilters = {
   term?: string;
@@ -43,7 +45,7 @@ export interface UiState {
   assetFilters?: AssetFilters;
   assetsTab?: number;
   autoClickProtection?: boolean;
-  currentAsset?: AssetDetail;
+  currentAsset?: AssetDetail | Nft;
   isFeatureUpdateShown?: boolean;
   nftFilters?: NftFilters;
   showSuspiciousAssets?: boolean;
