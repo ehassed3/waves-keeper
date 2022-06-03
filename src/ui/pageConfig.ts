@@ -37,6 +37,8 @@ import { OtherAccountsPage } from './components/pages/otherAccounts';
 import { Send } from './components/pages/send';
 import { ImportSuccess } from 'ui/components/pages/importSuccess';
 import { ImportDebug } from 'ui/components/pages/importDebug';
+import { NftCollection } from 'ui/components/pages/nfts/nftCollection';
+import { NftInfo } from 'ui/components/pages/nfts/nftInfo';
 
 export const PAGES = {
   WELCOME: 'welcome',
@@ -83,6 +85,8 @@ export const PAGES = {
   SEND: 'send',
   SWAP: 'swap',
   ROOT: '',
+  NFT_COLLECTION: 'nft_collection',
+  NFT_INFO: 'nft_details',
 };
 
 export const PAGES_CONF = {
@@ -550,6 +554,26 @@ export const PAGES_CONF = {
   },
   [PAGES.SWAP]: {
     component: Swap,
+    bottom: {
+      hide: true,
+    },
+    menu: {
+      back: true,
+      hasLogo: true,
+    },
+  },
+  [PAGES.NFT_COLLECTION]: {
+    component: NftCollection,
+    bottom: {
+      hide: true,
+    },
+    menu: {
+      back: true,
+      hasLogo: true,
+    },
+  },
+  [PAGES.NFT_INFO]: {
+    component: NftInfo,
     bottom: {
       hide: true,
     },
