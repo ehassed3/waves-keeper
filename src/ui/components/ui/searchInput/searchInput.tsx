@@ -4,11 +4,18 @@ import { Button, Input } from 'ui/components/ui';
 import cn from 'classnames';
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
+  className?: string;
   onInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear?: () => void;
 }
 
-export function SearchInput({ value, onInput, onClear, ...restProps }: Props) {
+export function SearchInput({
+  value,
+  onInput,
+  onClear,
+  className,
+  ...restProps
+}: Props) {
   const inputRef = React.createRef<HTMLInputElement>();
 
   return (
@@ -16,7 +23,7 @@ export function SearchInput({ value, onInput, onClear, ...restProps }: Props) {
       <Input
         {...restProps}
         ref={inputRef}
-        className={cn(styles.searchInput, 'font300')}
+        className={cn(styles.searchInput, 'font300', className)}
         onInput={onInput}
         value={value}
         spellCheck={false}
