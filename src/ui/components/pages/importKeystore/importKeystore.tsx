@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { seedUtils } from '@waves/waves-transactions';
-import { NetworkName, KeystoreProfiles } from 'accounts/types';
+import { KeystoreProfiles, NetworkName } from 'accounts/types';
 import { ImportKeystoreChooseFile } from './chooseFile';
 import { ImportKeystoreChooseAccounts } from './chooseAccounts';
 import { batchAddAccounts } from 'ui/actions/user';
@@ -22,11 +22,11 @@ function readFileAsText(file: File) {
 
 const networkCodeToNetworkMap: Record<
   'S' | 'T' | 'W',
-  Exclude<NetworkName, 'custom'>
+  Exclude<NetworkName, NetworkName.Custom>
 > = {
-  S: 'stagenet',
-  T: 'testnet',
-  W: 'mainnet',
+  S: NetworkName.Stagenet,
+  T: NetworkName.Testnet,
+  W: NetworkName.Mainnet,
 };
 
 function findNetworkByNetworkCode(networkCode: string): NetworkName {
