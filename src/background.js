@@ -344,6 +344,7 @@ class BackgroundService extends EventEmitter {
       getNetwork: this.networkController.getNetwork.bind(
         this.networkController
       ),
+      getNode: this.networkController.getNode.bind(this.networkController),
     });
 
     // Balance. Polls balances for accounts
