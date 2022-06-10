@@ -109,6 +109,7 @@ export function SwapForm({
   wavesFeeCoins,
   onSwap,
 }: Props) {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const assets = useAppSelector(state => state.assets);
@@ -183,13 +184,25 @@ export function SwapForm({
   }
 
   const [fromAmountValue, setFromAmountValue] = React.useState('');
+  const fromAmountTokens = new BigNumber(fromAmountValue || '0');
+
+  const [swapVendor, setSwapVendor] = React.useState(SwapVendor.Keeper);
+  const [swapVendorTouched, setSwapVendorTouched] = React.useState(false);
+
+  const slippageToleranceIndex = useAppSelector(
+    state => state.uiState.slippageToleranceIndex ?? 2
+  );
+
+  function setSlippageToleranceIndex(index: number) {
+    dispatch(setUiState({ slippageToleranceIndex: index }));
+  }
+
+  const slippageTolerance = SLIPPAGE_TOLERANCE_OPTIONS[slippageToleranceIndex];
+
   const [isPriceDirectionSwapped, setIsPriceDirectionSwapped] =
     React.useState(false);
 
-  const fromAmountTokens = new BigNumber(fromAmountValue || '0');
-
-  const [swapInfo, setSwapInfo] =
-    React.useState<SwapInfoState>(swapInfoLoadingState);
+  const [swapInfo, setSwapInfo] = React.useState(swapInfoLoadingState);
 
   const [swapClient] = React.useState(() => new SwapClient());
 
@@ -206,12 +219,6 @@ export function SwapForm({
     : null;
 
   const accountAddress = useAppSelector(state => state.selectedAccount.address);
-
-  const slippageToleranceIndex = useAppSelector(
-    state => state.uiState.slippageToleranceIndex ?? 2
-  );
-
-  const slippageTolerance = SLIPPAGE_TOLERANCE_OPTIONS[slippageToleranceIndex];
 
   const swapParams = React.useMemo(() => {
     let fromAmountTokens = new BigNumber(fromAmountValue || '0');
@@ -242,7 +249,7 @@ export function SwapForm({
   ]);
 
   React.useEffect(() => {
-    setTouched(false);
+    setSwapVendorTouched(false);
 
     if (swapParams) {
       setSwapInfo(swapInfoLoadingState);
@@ -313,7 +320,7 @@ export function SwapForm({
     accountBalance.assets[feeAssetId]
   );
 
-  const validationErrorMessage =
+  const balanceErrorMessage =
     fromAmountTokens.gt(fromAssetBalance.getTokens()) ||
     feeAssetBalance.getTokens().lt(sponsoredAssetFee.getTokens()) ||
     (fromAssetId === feeAssetId &&
@@ -323,19 +330,10 @@ export function SwapForm({
       ? t('swap.insufficientFundsError')
       : null;
 
-  function setSlippageToleranceIndex(index: number) {
-    dispatch(setUiState({ slippageToleranceIndex: index }));
-  }
-
   const [showSlippageToleranceModal, setShowSlippageToleranceModal] =
     React.useState(false);
 
-  const [selectedSwapVendor, setSelectedSwapVendor] = React.useState(
-    SwapVendor.Keeper
-  );
-  const [touched, setTouched] = React.useState(false);
-
-  const swapVendorInfo = swapInfo[selectedSwapVendor];
+  const swapVendorInfo = swapInfo[swapVendor];
 
   const minReceived =
     swapVendorInfo.type === 'data'
@@ -349,8 +347,6 @@ export function SwapForm({
           toAsset
         )
       : null;
-
-  const dispatch = useAppDispatch();
 
   const priceImpact =
     fromAmountTokens.eq(0) || swapVendorInfo.type !== 'data'
@@ -388,10 +384,10 @@ export function SwapForm({
   );
 
   React.useEffect(() => {
-    if (!touched) {
-      setSelectedSwapVendor(profitVendor);
+    if (!swapVendorTouched) {
+      setSwapVendor(profitVendor);
     }
-  }, [touched, profitVendor]);
+  }, [swapVendorTouched, profitVendor]);
 
   const fromSwappableAssets = React.useMemo(() => {
     const availableTickers = new Set(
@@ -470,7 +466,7 @@ export function SwapForm({
                 toAsset
               ).getCoins(),
               tx: swapVendorInfo.tx,
-              vendor: selectedSwapVendor,
+              vendor: swapVendor,
             });
           }}
         >
@@ -616,13 +612,12 @@ export function SwapForm({
                   <button
                     key={vendor}
                     className={cn(styles.toAmountCard, {
-                      [styles.toAmountCard_selected]:
-                        selectedSwapVendor === vendor,
+                      [styles.toAmountCard_selected]: swapVendor === vendor,
                     })}
                     type="button"
                     onClick={() => {
-                      setTouched(true);
-                      setSelectedSwapVendor(vendor);
+                      setSwapVendorTouched(true);
+                      setSwapVendor(vendor);
                     }}
                   >
                     <div className={styles.toAmountCardVendor}>
@@ -946,11 +941,11 @@ export function SwapForm({
 
       <div className={styles.stickyBottomPanel}>
         {(maxAmountExceededErrorMessage ||
-          validationErrorMessage ||
+          balanceErrorMessage ||
           swapErrorMessage) && (
           <div className={styles.stickyBottomPanelError}>
             {maxAmountExceededErrorMessage ||
-              validationErrorMessage ||
+              balanceErrorMessage ||
               swapErrorMessage}
           </div>
         )}
@@ -960,7 +955,7 @@ export function SwapForm({
           disabled={
             fromAmountTokens.eq(0) ||
             maxAmountExceededErrorMessage != null ||
-            validationErrorMessage != null ||
+            balanceErrorMessage != null ||
             swapVendorInfo.type !== 'data' ||
             isSwapInProgress
           }
