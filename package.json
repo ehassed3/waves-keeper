@@ -82,7 +82,7 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
-    "@keeper-wallet/swap-client": "^0.1.1",
+    "@keeper-wallet/swap-client": "^0.1.2",
     "@ledgerhq/hw-transport-webusb": "^6.24.1",
     "@sentry/react": "^6.16.1",
     "@types/chai": "^4.2.21",
