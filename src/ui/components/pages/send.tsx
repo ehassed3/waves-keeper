@@ -11,6 +11,11 @@ import { getBalances, setUiState } from 'ui/actions';
 import { Error, Loader } from '../ui';
 import { signAndPublishTransaction } from 'ui/actions/transactions';
 import { AssetAmountInput } from '../../../assets/amountInput';
+import {
+  fromEthereumToWavesAddress,
+  isEthereumAddress,
+  isValidEthereumAddress,
+} from '../../utils/ethereum';
 
 export function Send() {
   const { t } = useTranslation();
@@ -50,7 +55,8 @@ export function Send() {
     ? t('send.recipientRequiredError')
     : !(
         validators.isValidAddress(recipientValue, chainId) ||
-        validators.isValidAliasName(recipientValue)
+        validators.isValidAliasName(recipientValue) ||
+        isValidEthereumAddress(recipientValue)
       )
     ? t('send.recipientInvalidError')
     : null;
@@ -72,6 +78,10 @@ export function Send() {
   const showAttachmentError = isTriedToSubmit && attachmentError != null;
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const recipientAddress = isEthereumAddress(recipientValue)
+    ? fromEthereumToWavesAddress(recipientValue, chainId)
+    : recipientValue;
 
   return (
     <form
@@ -95,7 +105,7 @@ export function Send() {
                 assetId: currentAsset.id,
                 tokens: amountValue,
               },
-              recipient: recipientValue,
+              recipient: recipientAddress,
               attachment: attachmentValue,
             },
           })
@@ -131,7 +141,24 @@ export function Send() {
               }}
             />
 
-            <Error show={showRecipientError}>{recipientError}</Error>
+            {showRecipientError ? (
+              <Error show={showRecipientError}>{recipientError}</Error>
+            ) : (
+              isEthereumAddress(recipientValue) && (
+                <div className={styles.recipientHelper}>
+                  <svg width="14" height="14" viewBox="0 0 7 7">
+                    <rect
+                      x="3.01849"
+                      width="4.26214"
+                      height="4.26877"
+                      transform="rotate(45 3.01849 0)"
+                      fill="var(--color-basic500)"
+                    />
+                  </svg>
+                  <div className={styles.wavesAddress}>{recipientAddress}</div>
+                </div>
+              )
+            )}
           </div>
 
           {!isNft && (
