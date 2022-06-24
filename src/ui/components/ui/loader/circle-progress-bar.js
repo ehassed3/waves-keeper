@@ -422,7 +422,12 @@ export const CircleProgressBar = function (canvas, options) {
       if (Object.prototype.hasOwnProperty.call(source, attrName)) {
         var destVal = destination[attrName];
         var sourceVal = source[attrName];
-        if (recursive && self.isObject(destVal) && self.isObject(sourceVal)) {
+        if (
+          recursive &&
+          self.isObject(destVal) &&
+          self.isObject(sourceVal) &&
+          Object.prototype.hasOwnProperty.call(destination, attrName)
+        ) {
           destination[attrName] = self.extend(destVal, sourceVal, recursive);
         } else {
           destination[attrName] = sourceVal;
